@@ -36,21 +36,21 @@ end
 fprintf('EMSE em regime do NLMS = %.5f\n', mean(EMSE_nlms(3000:end)));
 
 %%
-% Execução do RLMS
+% Execução do RLS
 lambda = 0.999;
-EMSE_rlms = zeros(N,1);
+EMSE_rls = zeros(N,1);
 for i = 1:L
     x = sqrt(var_x)*randn(N,1);
     v = sqrt(var_v)*randn(N,1);
-    [ e, ~, ~ ] = RLMS(x, v, h, lambda, h);
-    EMSE_rlms = EMSE_rlms +(e.^2-var_v)/L;
+    [ e, ~, ~ ] = RLS(x, v, h, lambda, h);
+    EMSE_rls = EMSE_rls +(e.^2-var_v)/L;
 end
-fprintf('EMSE em regime do RLMS = %.5f\n', mean(EMSE_rlms(3000:end)));
+fprintf('EMSE em regime do RLS = %.5f\n', mean(EMSE_rls(3000:end)));
 
 %%
 % Plota o EMSE
 figure();
-plot(n, EMSE_nlms, n, EMSE_rlms);
+semilogy(n, EMSE_nlms, n, EMSE_rls);
 title('EMSE');
-legend('NLMS', 'RLMS');
+legend('NLMS', 'RLS');
 xlabel('n (amostras)');

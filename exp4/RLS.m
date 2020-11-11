@@ -1,5 +1,5 @@
-function [ e, delta_w, y ] = RLMS(x, v, h, lambda, Wo, P1)
-%RLMS Algoritmo RLMS para filtros adaptativos FIR
+function [ e, delta_w, y ] = RLS(x, v, h, lambda, Wo, P1)
+%RLS Algoritmo RLS para filtros adaptativos FIR
 %   Matheus Bordin Gomes
 % x é o sinal de referência
 % v é o sinal de interesse (em caso real, é desconhecido)

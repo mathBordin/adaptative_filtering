@@ -30,11 +30,11 @@ ERLE_nlms = 10*log10(y_nlms.^2./e_nlms.^2);
 MSD_nlms = sum(delta_w_nlms.^2,2);
 
 %%
-% Execução do RLMS
+% Execução do RLS
 lambda = 0.999999;
-[ e_rlms, delta_w_rlms, y_rlms ] = RLMS(x, v, h, lambda, h);
-ERLE_rlms = 10*log10(y_rlms.^2./e_rlms.^2);
-MSD_rlms = sum(delta_w_rlms.^2,2);
+[ e_rls, delta_w_rls, y_rls ] = RLS(x, v, h, lambda, h);
+ERLE_rls = 10*log10(y_rls.^2./e_rls.^2);
+MSD_rls = sum(delta_w_rls.^2,2);
 
 %%
 % Comparação entre e[n] e v[n]
@@ -48,8 +48,8 @@ plot(n, e_nlms);
 title('e[n] (NLMS)');
 xlabel('n (amostras)');
 subplot(3,1,3);
-plot(n, e_rlms);
-title('e[n] (RLMS)');
+plot(n, e_rls);
+title('e[n] (RLS)');
 xlabel('n (amostras)');
 
 %%
@@ -60,14 +60,14 @@ plot(n, ERLE_nlms);
 title('ERLE (NLMS)');
 xlabel('n (amostras)');
 subplot(2,1,2);
-plot(n, ERLE_rlms);
-title('ERLE (RLMS)');
+plot(n, ERLE_rls);
+title('ERLE (RLS)');
 xlabel('n (amostras)');
 
 %%
 % Plota o MSD
 figure();
-plot(n, MSD_nlms, n, MSD_rlms);
+plot(n, MSD_nlms, n, MSD_rls);
 title('MSD');
-legend('NLMS', 'RLMS');
+legend('NLMS', 'RLS');
 xlabel('n (amostras)');
