@@ -25,14 +25,19 @@ n = 1:N;
 % Execução do NLMS
 mu = 0.01;
 eps = 0.1;
-[ e_nlms, delta_w_nlms, y_nlms ] = NLMS(x, v, h, mu, eps, h);
+tic
+[ e_nlms, delta_w_nlms, y_nlms, runtime ] = NLMS(x, v, h, mu, eps, h);
+nlms_avg_time = runtime;
+fprintf('NLMS avarage time = %.5f\n', nlms_avg_time);
 ERLE_nlms = 10*log10(y_nlms.^2./e_nlms.^2);
 MSD_nlms = sum(delta_w_nlms.^2,2);
 
 %%
 % Execução do RLS
 lambda = 0.999999;
-[ e_rls, delta_w_rls, y_rls ] = RLS(x, v, h, lambda, h);
+[ e_rls, delta_w_rls, y_rls, runtime ] = RLS(x, v, h, lambda, h);
+rls_avg_time = runtime;
+fprintf('RLS avarage time = %.5f\n', rls_avg_time);
 ERLE_rls = 10*log10(y_rls.^2./e_rls.^2);
 MSD_rls = sum(delta_w_rls.^2,2);
 
@@ -67,7 +72,7 @@ xlabel('n (amostras)');
 %%
 % Plota o MSD
 figure();
-plot(n, MSD_nlms, n, MSD_rls);
+semilogy(n, MSD_nlms, n, MSD_rls);
 title('MSD');
 legend('NLMS', 'RLS');
 xlabel('n (amostras)');

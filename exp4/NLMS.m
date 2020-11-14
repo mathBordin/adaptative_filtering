@@ -1,4 +1,4 @@
-function [ e, delta_w, y ] = NLMS(x, v, h, mu, eps, Wo)
+function [ e, delta_w, y, runtime ] = NLMS(x, v, h, mu, eps, Wo)
 %NLMS Algoritmo NLMS para filtros adaptativos FIR
 %   Matheus Bordin Gomes
 % x é o sinal de referência
@@ -40,6 +40,7 @@ y = filter(h,1,x);
 d = y + v;
         
 % Iteração do algoritmo
+tic;
 for n = 1:N
     x_aux = [x(n); x_aux(1:M-1)];
     y_est(n) = W(n,:)*x_aux;
@@ -49,5 +50,6 @@ for n = 1:N
         W(n+1,:) = W(n,:)+(mu/(x_aux'*x_aux+eps))*e(n)*x_aux';
     end
 end
+runtime = toc;
 
 end

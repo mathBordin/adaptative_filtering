@@ -1,4 +1,4 @@
-function [ e, delta_w, y ] = RLS(x, v, h, lambda, Wo, P1)
+function [ e, delta_w, y, run_time ] = RLS(x, v, h, lambda, Wo, P1)
 %RLS Algoritmo RLS para filtros adaptativos FIR
 %   Matheus Bordin Gomes
 % x é o sinal de referência
@@ -26,8 +26,7 @@ M = length(h);
 %%
 % Declaração de variáveis iniciais
 W = zeros(N,M);  
-Pprev = eye(M);
-Pnext = eye(M);
+P = eye(M);
 e = zeros(N,1);
 delta_w = zeros(N,M);
 phi = zeros(M,1);
@@ -41,20 +40,23 @@ y = filter(h,1,x);
 d = y + v;
 
 if exist('P1','var')
-   Pprev = P1;
+   P = P1;
 end
 
 %%
 % Iteração do algoritmo
+tic
 for n = 1:N
     phi = [x(n); phi(1:M-1)];
     e(n) = d(n)-phi'*W(n,:)';
     delta_w(n,:) = Wo' - W(n,:);
     if(n~=N)
-        Pnext = lambda^(-1)*Pprev - lambda^(-1)*(Pprev*phi*phi'*Pprev)/(lambda+phi'*Pprev*phi);
-        W(n+1,:) = W(n,:)+(e(n)*Pnext*phi)';
-        Pprev = Pnext;
+        P_phi = P*phi;
+        P_phi_n = P_phi/sqrt(lambda*(lambda+phi'*P_phi));
+        P = lambda^(-1)*P/lambda - (P_phi_n*P_phi_n');
+        W(n+1,:) = W(n,:)+(e(n)*P*phi)';
     end
 end
+run_time = toc;
 
 end
